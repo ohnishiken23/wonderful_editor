@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe User, type: :model do
   # pending "add some examples to (or delete) #{__FILE__}"
@@ -12,7 +12,7 @@ RSpec.describe User, type: :model do
 
   # context "emailが重複しているとき" do
   #   User.create!(name: "foo", email: "foo@example.com", password: "123456")
-    # user = User.new(name: "foo", email: "foo@example.com", uid: 0, provider: "")
+  # user = User.new(name: "foo", email: "foo@example.com", uid: 0, provider: "")
   #   let(:user) { build(:user, email: "foo@example.com") }
   #   fit "ユーザー作成に失敗する" do
   #     expect(user).to be_invalid
