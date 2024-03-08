@@ -1,7 +1,6 @@
 module Api
   module V1
     class ArticlesController < BaseApiController
-
       # GET /articles
       def index
         articles = Article.order(updated_at: :desc)
