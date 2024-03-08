@@ -22,6 +22,10 @@ class Article < ApplicationRecord
   validates :body, presence: true
 
   belongs_to :user
+  def user=(user)
+    self.user_id = user.id
+  end
+
   has_many :article_likes, dependent: :destroy
   has_many :comments, dependent: :destroy
 end
