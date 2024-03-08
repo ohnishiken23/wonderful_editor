@@ -15,7 +15,7 @@ RSpec.describe "Users", type: :request do
     it "全てのキーが取得できる" do
       subject
       res = JSON.parse(response.body)
-      expect(res[0].keys).to eq ["id", "provider", "uid", "allow_password_change", "name", "image", "email", "created_at", "updated_at"]
+      expect(res[0].keys).to eq ["id", "name", "email"]
     end
 
     it "ステータスコードが正常" do
