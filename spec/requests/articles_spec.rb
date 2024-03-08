@@ -14,11 +14,21 @@ RSpec.describe "Articles", type: :request do
       end
     end
 
-    it "記事の一覧が取得できる" do
+    it "全ての記事が取得できる" do
       subject
       res = JSON.parse(response.body)
       expect(res.length).to eq 15
+    end
+
+    it "全てのキーが取得できる" do
+      subject
+      res = JSON.parse(response.body)
       expect(res[0].keys).to eq ["id", "title", "updated_at", "user"]
+    end
+
+    it "ステータスコードが正常" do
+      subject
+      JSON.parse(response.body)
       expect(response).to have_http_status(:ok)
     end
   end

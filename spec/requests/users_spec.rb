@@ -6,11 +6,21 @@ RSpec.describe "Users", type: :request do
 
     before { FactoryBot.create_list(:user, 5) }
 
-    it "ユーザーの一覧が取得できる" do
+    it "全てのユーザーが取得できる" do
       subject
       res = JSON.parse(response.body)
       expect(res.length).to eq 5
+    end
+
+    it "全てのキーが取得できる" do
+      subject
+      res = JSON.parse(response.body)
       expect(res[0].keys).to eq ["id", "provider", "uid", "allow_password_change", "name", "image", "email", "created_at", "updated_at"]
+    end
+
+    it "ステータスコードが正常" do
+      subject
+      JSON.parse(response.body)
       expect(response).to have_http_status(:ok)
     end
   end
