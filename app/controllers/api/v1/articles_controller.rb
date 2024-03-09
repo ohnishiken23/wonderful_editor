@@ -10,7 +10,7 @@ module Api
       # GET /articles/1
       def show
         article = Article.find(params[:id])
-        render json: article
+        render json: article, serializer: Api::V1::ArticleSerializer
       end
 
       # GET /articles/new
