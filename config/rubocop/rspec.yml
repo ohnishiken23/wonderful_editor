@@ -60,3 +60,7 @@ RSpec/NestedGroups:
 # ブロックの方が見た目がスッキリして見やすいので、どちらでもお好きにどうぞ。
 RSpec/ReturnFromStub:
   Enabled: false
+
+# itブロック内に複数のexpectを書けるように設定緩和
+RSpec/MultipleExpectations:
+  Enabled: false

@@ -21,10 +21,12 @@ module Api
       # POST /articles
       def create
         @article = Article.new(article_params)
+        @article.user_id = current_user.id
+
         if @article.save
-          redirect_to @article, notice: "Article was successfully created."
+          render json: @article, status: :created
         else
-          render :new, status: :unprocessable_entity
+          render json: @article.errors, status: :unprocessable_entity
         end
       end
 
