@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Articles", type: :request do
   before { create_list(:article, 3) }
 
-  describe "GET /articles" do
+  describe "GET /api/v1/articles" do
     subject { get api_v1_articles_path }
 
     it "全ての記事が取得できる" do
@@ -15,7 +15,7 @@ RSpec.describe "Articles", type: :request do
     end
   end
 
-  describe "GET /articles/:id" do
+  describe "GET /api/v1/articles/:id" do
     subject { get(api_v1_article_path(article_id)) }
 
     let(:article) { create(:article) }
@@ -40,7 +40,7 @@ RSpec.describe "Articles", type: :request do
     end
   end
 
-  describe "POST /articles" do
+  describe "POST /api/v1/articles" do
     subject { post(api_v1_articles_path, params: params) }
 
     let(:params) { { article: attributes_for(:article) } }
@@ -51,6 +51,22 @@ RSpec.describe "Articles", type: :request do
         expect(res["title"]).to eq params[:article][:title]
         expect(res["body"]).to eq params[:article][:body]
         expect(response).to have_http_status(:created)
+      end
+    end
+  end
+
+  describe "PATCH /api/v1/articles/:id" do
+    subject { patch(api_v1_article_path(article_id), params: params) }
+
+    let(:params) { { article: { title: "New Title", created_at: 1.day.ago } } }
+    let(:article_id) { article.id }
+    let(:article) { create(:article) }
+
+    context "指定したidの記事が存在するとき" do
+      it "その記事のレコードが取得できる" do
+        expect { subject }.to change { Article.find(article_id).title }.from(article.title).to(params[:article][:title]) &
+                              not_change { Article.find(article_id).body } &
+                              not_change { Article.find(article_id).created_at }
       end
     end
   end
