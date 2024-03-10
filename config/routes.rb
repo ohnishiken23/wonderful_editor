@@ -8,7 +8,6 @@ Rails.application.routes.draw do
     namespace :v1 do
       mount_devise_token_auth_for "User", at: "auth"
       resources :users, defaults: { format: :json }
-      # resources :articles, defaults: { format: :json }, only: [:index]
       resources :articles, defaults: { format: :json }
     end
   end

@@ -7,7 +7,7 @@ module Api
         render json: articles, each_serializer: Api::V1::ArticlePreviewSerializer
       end
 
-      # GET /articles/1
+      # GET /articles/:id
       def show
         article = Article.find(params[:id])
         render json: article, serializer: Api::V1::ArticleSerializer
@@ -30,11 +30,14 @@ module Api
         end
       end
 
-      private
+      # PATCH /articles/:id
+      def update
+        article = Article.find(params[:id])
+        article.update!(article_params)
+        render json: article, serializer: Api::V1::ArticleSerializer
+      end
 
-        # def set_article
-        #   @article = Article.find(params[:id])
-        # end
+      private
 
         def article_params
           params.require(:article).permit(:title, :body)

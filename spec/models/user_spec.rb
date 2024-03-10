@@ -1,27 +1,25 @@
 require "rails_helper"
 
 RSpec.describe User, type: :model do
-  # pending "add some examples to (or delete) #{__FILE__}"
   context "emailが重複ないとき" do
     it "ユーザーが作られる" do
-      # user = User.new(name: "ken", email: "ken@example.com", password: "123456")
       user = create(:user)
-      expect(user).to be_valid
+      expect(user.valid?).to eq true
     end
   end
 
-  # context "emailが重複しているとき" do
-  #   User.create!(name: "foo", email: "foo@example.com", password: "123456")
-  # user = User.new(name: "foo", email: "foo@example.com", uid: 0, provider: "")
-  #   let(:user) { build(:user, email: "foo@example.com") }
-  #   fit "ユーザー作成に失敗する" do
-  #     expect(user).to be_invalid
-  #   end
-  # end
+  context "emailが重複しているとき" do
+    let(:exist_user) { create(:user) }
+    let(:user) { build(:user, email: exist_user.email) }
+
+    it "ユーザー作成に失敗する" do
+      expect(user.valid?).to eq false
+    end
+  end
 
   context "ユーザー名が存在しないとき" do
+    let(:user) { User.new(email: "foo@example.com", password: "123456") }
     it "ユーザー作成に失敗する" do
-      user = User.new(email: "foo@example.com", password: "123456")
       expect(user).to be_invalid
     end
   end
