@@ -45,7 +45,7 @@ RSpec.describe "Articles", type: :request do
 
     let(:params) { { article: attributes_for(:article) } }
     context "適切なパラメーターを送信したとき" do
-      fit "記事のレコードを作成できる" do
+      it "記事のレコードを作成できる" do
         expect { subject }.to change { Article.count }.by(1)
         res = JSON.parse(response.body)
         expect(res["title"]).to eq params[:article][:title]
