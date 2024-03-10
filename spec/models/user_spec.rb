@@ -22,7 +22,6 @@ RSpec.describe User, type: :model do
   context "ユーザー名が存在しないとき" do
     it "ユーザー作成に失敗する" do
       user = User.new(email: "foo@example.com", password: "123456")
-      # binding.pry
       expect(user).to be_invalid
     end
   end
