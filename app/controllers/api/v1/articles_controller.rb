@@ -37,6 +37,12 @@ module Api
         render json: article, serializer: Api::V1::ArticleSerializer
       end
 
+      # DELETE /articles/:id
+      def destroy
+        article = Article.find(params[:id])
+        article.destroy!
+      end
+
       private
 
         def article_params
