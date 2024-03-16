@@ -1,7 +1,5 @@
 class Api::V1::BaseApiController < ApplicationController
-  def current_user
-    # 仮実装として、users テーブルの一番初めのユーザーを返す
-    # @current_user = User.first
-    User.first
-  end
+  alias_method :current_user, :current_api_v1_user
+  alias_method :authenticate_user!, :authenticate_api_v1_user!
+  alias_method :user_signed_in?, :api_v1_user_signed_in?
 end
