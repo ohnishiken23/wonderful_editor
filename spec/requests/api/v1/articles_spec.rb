@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Articles", type: :request do
-  before { create_list(:article, 3) }
+  # before { create_list(:article, :published, 3) }
+  let!(:article1) { create(:article, :published) }
+  let!(:article2) { create(:article, :published) }
+  let!(:article3) { create(:article, :published) }
 
   describe "GET /api/v1/articles" do
     subject { get api_v1_articles_path }
@@ -18,7 +21,7 @@ RSpec.describe "Articles", type: :request do
   describe "GET /api/v1/articles/:id" do
     subject { get(api_v1_article_path(article_id)) }
 
-    let(:article) { create(:article) }
+    let(:article) { create(:article, :published) }
     let(:article_id) { article.id }
     context "指定したidの記事が存在するとき" do
       it "その記事のレコードが取得できる" do
@@ -29,6 +32,14 @@ RSpec.describe "Articles", type: :request do
         expect(res["updated_at"]).to eq article.updated_at.utc.iso8601(3)
         expect(res["id"]).to eq article.id
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "記事が下書き状態のとき" do
+      let(:article) { create(:article, :draft) }
+
+      it "その記事のレコードが取得できない" do
+        expect { subject }.to raise_error ActiveRecord::RecordNotFound
       end
     end
 
@@ -43,7 +54,7 @@ RSpec.describe "Articles", type: :request do
   describe "POST /api/v1/articles" do
     subject { post(api_v1_articles_path, params: params, headers: headers) }
 
-    let(:params) { { article: attributes_for(:article) } }
+    let(:params) { { article: attributes_for(:article, status: :published) } }
     let(:current_user) { create(:user) }
     let(:headers) { current_user.create_new_auth_token }
 
@@ -63,7 +74,6 @@ RSpec.describe "Articles", type: :request do
 
     let(:params) { { article: attributes_for(:article) } }
     let(:current_user) { create(:user) }
-    # before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) }
     let(:headers) { current_user.create_new_auth_token }
 
     context "自分が所持している記事のレコードを更新しようとするとき" do
@@ -76,12 +86,13 @@ RSpec.describe "Articles", type: :request do
       end
     end
 
-    context "自分が所持していない記事のレコードを更新しようとするとき" do
+    context "他のユーザーの記事を更新しようとるすとき" do
       let(:other_user) { create(:user) }
       let!(:article) { create(:article, user: other_user) }
 
       it "更新できない" do
         expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+        change { Article.count }.by(0)
       end
     end
   end
