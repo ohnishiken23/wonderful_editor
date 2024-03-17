@@ -5,20 +5,20 @@ module Api
 
       # GET /articles
       def index
-        articles = Article.order(updated_at: :desc)
+        articles = Article.published.order(updated_at: :desc)
         render json: articles, each_serializer: Api::V1::ArticlePreviewSerializer
       end
 
       # GET /articles/:id
       def show
-        article = Article.find(params[:id])
+        article = Article.published.find(params[:id])
         render json: article, serializer: Api::V1::ArticleSerializer
       end
 
       # POST /articles
       def create
-        article = Article.new(article_params)
-        article.user_id = current_user.id
+        # article.user_id = current_user.id
+        article = current_user.articles.create!(article_params)
 
         if article.save
           render json: article, serializer: Api::V1::ArticleSerializer, status: :created
@@ -43,7 +43,7 @@ module Api
       private
 
         def article_params
-          params.require(:article).permit(:title, :body)
+          params.require(:article).permit(:title, :body, :status)
         end
     end
   end
