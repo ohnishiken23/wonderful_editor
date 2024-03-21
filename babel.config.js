@@ -5,6 +5,12 @@ module.exports = function(api) {
   var isProductionEnv = api.env('production')
   var isTestEnv = api.env('test')
 
+  module.exports = {
+    plugins: [
+      ['@babel/plugin-proposal-private-property-in-object', { loose: true }]
+    ]
+  };
+
   if (!validEnv.includes(currentEnv)) {
     throw new Error(
       'Please specify a valid `NODE_ENV` or ' +
