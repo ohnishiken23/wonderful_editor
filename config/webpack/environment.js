@@ -1,5 +1,3 @@
-// config/webpack/environment.js
-
 const { environment } = require('@rails/webpacker')
 const { VueLoaderPlugin } = require('vue-loader')
 
